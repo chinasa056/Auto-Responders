@@ -10,6 +10,10 @@ import integrationRoutes from './routes/integration';
 const app = express()
 
 app.use(express.json())
+const baseUrl = '/api/v1'
+
+app.use(`${baseUrl}/integrations`, integrationRoutes)
+
 app.use((err: Error, req: Request, res: Response, next: NextFunction)=>{
     if(err) {
         errorHandler(err, req, res, next)
@@ -17,9 +21,6 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction)=>{
         next()
     }
 })
-const baseUrl = '/api/v1'
-
-app.use(`${baseUrl}/integrations`, integrationRoutes)
 
 const startServer = async () => {
     await dbConnect()

@@ -1,3 +1,4 @@
+
 import { CustomError } from "src/error/CustomError";
 import { ErrorCode } from "src/enum/error";
 import * as MailchimpAdapter from "./providers/mailChimp";
@@ -5,7 +6,8 @@ import * as GetResponseAdapter from "./providers/getResponse";
 import { NormalizedListResponse } from "src/interfaces/normalizedList";
 import {IIntegration} from "src/interfaces/integrations"
 import Integration from "src/models/integration";
-import { Provider } from "src/enum/appEnums";
+import { Provider, Status } from "src/enum/appEnums";
+import { Types } from "mongoose";
 
 export async function addIntegration({
   userId,
@@ -34,27 +36,29 @@ export async function addIntegration({
     provider,
     apiKey,
     meta: result.details,
-    status: "active",
+    status: Status.active,
     validatedAt: new Date(),
   });
 
-  return await integration.save();
-}
+   await integration.save();
+    return integration;
+};
 
 export async function fetchLists({
-  userId,
+  integrationId,
   provider,
   page = 1,
   perPage = 10,
 }: {
-  userId?: string;
+  integrationId: string;
   provider: Provider;
   page?: number;
   perPage?: number;
 }): Promise<NormalizedListResponse> {
-  const integration = await Integration.findOne({ userId, provider });
+    
+  const integration = await Integration.findOne({ integrationId, provider });
   if (!integration) {
-    throw new CustomError("Integration not found", ErrorCode.NOT_FOUND, 404);
+    throw new CustomError("info not found", ErrorCode.NOT_FOUND, 404);
   }
 
   let lists;

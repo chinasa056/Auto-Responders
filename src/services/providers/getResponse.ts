@@ -30,7 +30,7 @@ export async function fetchLists(apiKey: string, page = 1, perPage = 10): Promis
       provider: "getresponse",
       id: campaign.campaignId,
       name: campaign.name,
-      memberCount: undefined, // GR requires extra stats call if needed
+      memberCount: undefined, 
       raw: campaign,
     }));
   } catch (err: any) {

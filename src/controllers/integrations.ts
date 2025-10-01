@@ -14,9 +14,13 @@ export async function createIntegration(req: Request, res: Response, next: NextF
 
 export async function getIntegrationLists(req: Request, res: Response, next: NextFunction) {
   try {
-    const { userId, provider, page = 1, perPage = 10 } = req.query;
+    const { integrationId, provider, page = 1, perPage = 10 } = req.query;
+    
+    if (!integrationId || !provider) {
+      return res.status(400).json({ status: false, message: "integrationId and provider are required" });
+    }
     const result = await integrationService.fetchLists({
-      userId: userId as string,
+      integrationId: integrationId as string,
       provider: Provider[provider as keyof typeof Provider],
       page: Number(page),
       perPage: Number(perPage),

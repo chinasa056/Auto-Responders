@@ -1,5 +1,3 @@
-// src/interfaces/NormalizedList.ts
-
 import { Provider } from "src/enum/appEnums";
 
 export interface NormalizedList {
