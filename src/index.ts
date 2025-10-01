@@ -5,6 +5,7 @@ import express, { NextFunction, Request, Response } from 'express'
 import dbConnect from './config/database';
 import { errorHandler } from './middleware/handleErrors';
 const port = process.env.PORT
+import integrationRoutes from './routes/integration';
 
 const app = express()
 
@@ -16,7 +17,9 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction)=>{
         next()
     }
 })
-// const baseUrl = '/api/v1'
+const baseUrl = '/api/v1'
+
+app.use(`${baseUrl}/integrations`, integrationRoutes)
 
 const startServer = async () => {
     await dbConnect()

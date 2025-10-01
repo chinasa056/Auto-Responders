@@ -23,6 +23,8 @@ export enum ErrorCode {
   TOKEN_EXPIRED = 'token_expired',
   DUPLICATE_KEY = 'duplicate_key',
   REQUEST_VALIDATION = 'request_validation',
-  SERVER_ERROR = "SERVER_ERROR"
+  SERVER_ERROR = "SERVER_ERROR",
+  INVALID_TOKEN = "invalid_token",
+  PROVIDER_UNAVAILABLE = "provider_unavailable",
 };
 
