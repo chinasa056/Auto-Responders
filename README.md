@@ -63,7 +63,8 @@ npm run start
 ### Base URL
 
 ```
-http://localhost:2030/api/v1
+live-link: https://auto-responders.onrender.com
+local: http://localhost:2030/api/v1
 ```
 
 ---
@@ -80,8 +81,8 @@ POST /integrations
 
 ```json
 {
-  "provider": "mailchimp", 
-  "apiKey": "abcd1234-us1"
+  "provider": "getresponse", 
+  "apiKey": "<API-KEY>"
 }
 ```
 
@@ -89,14 +90,43 @@ POST /integrations
 
 ```json
 {
-  "status": true,
-  "message": "Integration saved and validated successfully",
-  "data": {
-    "_id": "65123abcd456ef7890123gh",
-    "provider": "mailchimp",
-    "apiKey": "****-us1",
-    "createdAt": "2025-09-29T12:00:00.000Z"
-  }
+    "status": true,
+    "data": {
+        "provider": "getresponse",
+        "apiKey": "<API KEY>",
+        "meta": {
+            "accountId": "",
+            "firstName": "",
+            "lastName": "",
+            "email": "",
+            "phone": "+",
+            "companyName": "",
+            "state": "",
+            "city": "",
+            "street": "",
+            "zipCode": "",
+            "countryCode": {
+                "countryCodeId": "",
+                "countryCode": ""
+            },
+            "industryTag": {
+                "industryTagId": null
+            },
+            "numberOfEmployees": null,
+            "timeFormat": "12h",
+            "timeZone": {
+                "name": "Africa/Lagos",
+                "offset": "+01:00"
+            },
+            "href": "https://api.getresponse.com/v3/accounts"
+        },
+        "status": "active",
+        "validatedAt": "2025-10-02T06:06:42.192Z",
+        "_id": "68de16721a567c165aaeec3c",
+        "createdAt": "2025-10-02T06:06:42.199Z",
+        "updatedAt": "2025-10-02T06:06:42.199Z",
+        "__v": 0
+    }
 }
 ```
 
@@ -117,8 +147,8 @@ POST /integrations
 
 **Endpoint:**
 
-```
-GET /integrations/lists?provider=mailchimp
+```REST
+GET localhost:2020/api/v1/integrations/lists?provider=getresponse&integrationId=<the ID returned from saving>
 ```
 
 **Response (Mailchimp example):**

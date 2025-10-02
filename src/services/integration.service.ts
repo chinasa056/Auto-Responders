@@ -18,6 +18,16 @@ export async function addIntegration({
   provider: Provider
   apiKey: string;
 }): Promise<IIntegration> {
+
+    const existing = await Integration.findOne({ userId, provider, apiKey });
+  if (existing) {
+    throw new CustomError(
+      "Integration with this provider and API key already exists",
+      ErrorCode.CONFLICT,
+      409
+    );
+  };
+  
   let result;
   if (provider === Provider.mailchimp) {
     result = await MailchimpAdapter.validateApiKey(apiKey);
