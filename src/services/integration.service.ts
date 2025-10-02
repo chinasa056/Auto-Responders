@@ -10,16 +10,14 @@ import { Provider, Status } from "src/enum/appEnums";
 import { Types } from "mongoose";
 
 export async function addIntegration({
-  userId,
   provider,
   apiKey,
 }: {
-  userId?: string;
   provider: Provider
   apiKey: string;
 }): Promise<IIntegration> {
 
-    const existing = await Integration.findOne({ userId, provider, apiKey });
+    const existing = await Integration.findOne({ provider, apiKey });
   if (existing) {
     throw new CustomError(
       "Integration with this provider and API key already exists",
@@ -27,7 +25,7 @@ export async function addIntegration({
       409
     );
   };
-  
+
   let result;
   if (provider === Provider.mailchimp) {
     result = await MailchimpAdapter.validateApiKey(apiKey);
@@ -42,7 +40,6 @@ export async function addIntegration({
   }
 
   const integration = new Integration({
-    userId,
     provider,
     apiKey,
     meta: result.details,

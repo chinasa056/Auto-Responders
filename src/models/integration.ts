@@ -5,7 +5,6 @@ import { IIntegration } from "src/interfaces/integrations";
 
 const IntegrationSchema = new Schema<IIntegration>(
     {
-        userId: { type: String, required: false },
         provider: { type: String, enum: Object.values(Provider), required: true },
         apiKey: { type: String, required: true },
         meta: { type: Object, default: {} },

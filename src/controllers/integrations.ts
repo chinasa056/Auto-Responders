@@ -4,8 +4,8 @@ import { Provider } from "src/enum/appEnums";
 
 export async function createIntegration(req: Request, res: Response, next: NextFunction) {
   try {
-    const { userId, provider, apiKey } = req.body;
-    const integration = await integrationService.addIntegration({ userId, provider, apiKey });
+    const { provider, apiKey } = req.body;
+    const integration = await integrationService.addIntegration({provider, apiKey });
     res.status(201).json({ status: true, data: integration });
   } catch (err) {
     next(err);
@@ -15,7 +15,7 @@ export async function createIntegration(req: Request, res: Response, next: NextF
 export async function getIntegrationLists(req: Request, res: Response, next: NextFunction) {
   try {
     const { integrationId, provider, page = 1, perPage = 10 } = req.query;
-    
+
     if (!integrationId || !provider) {
       return res.status(400).json({ status: false, message: "integrationId and provider are required" });
     }
