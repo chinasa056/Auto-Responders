@@ -1,6 +1,6 @@
 export enum Provider {
     mailchimp = "mailchimp",
-    getresponse = "getesponse"
+    getresponse = "getresponse"
 }
 
 export enum Status {
