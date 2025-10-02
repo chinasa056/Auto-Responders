@@ -6,8 +6,10 @@ import dbConnect from './config/database';
 import { errorHandler } from './middleware/handleErrors';
 const port = process.env.PORT
 import integrationRoutes from './routes/integration';
+import cors from "cors";
 
 const app = express()
+app.use(cors())
 
 app.use(express.json())
 const baseUrl = '/api/v1'
