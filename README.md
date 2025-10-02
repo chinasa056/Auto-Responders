@@ -63,7 +63,8 @@ npm run start
 ### Base URL
 
 ```
-live-link: https://auto-responders.onrender.com
+live-link: https://auto-responders.onrender.com/api/v1
+
 local: http://localhost:2030/api/v1
 ```
 
