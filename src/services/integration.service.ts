@@ -4,79 +4,79 @@ import { ErrorCode } from "src/enum/error";
 import * as MailchimpAdapter from "./providers/mailChimp";
 import * as GetResponseAdapter from "./providers/getResponse";
 import { NormalizedListResponse } from "src/interfaces/normalizedList";
-import {IIntegration} from "src/interfaces/integrations"
+import { IIntegration } from "src/interfaces/integrations"
 import Integration from "src/models/integration";
 import { Provider, Status } from "src/enum/appEnums";
 import { Types } from "mongoose";
 
 export async function addIntegration({
-  provider,
-  apiKey,
+    provider,
+    apiKey,
 }: {
-  provider: Provider
-  apiKey: string;
+    provider: Provider
+    apiKey: string;
 }): Promise<IIntegration> {
 
     const existing = await Integration.findOne({ provider, apiKey });
-  if (existing) {
-    throw new CustomError(
-      "Integration with this provider and API key already exists",
-      ErrorCode.CONFLICT,
-      409
-    );
-  };
+    if (existing) {
+        throw new CustomError(
+            "Integration with this provider and API key already exists",
+            ErrorCode.CONFLICT,
+            409
+        );
+    };
 
-  let result;
-  if (provider === Provider.mailchimp) {
-    result = await MailchimpAdapter.validateApiKey(apiKey);
-  } else if (provider === Provider.getresponse) {
-    result = await GetResponseAdapter.validateApiKey(apiKey);
-  } else {
-    throw new CustomError("Unsupported provider", ErrorCode.BAD_REQUEST, 400);
-  }
+    let result;
+    if (provider === Provider.mailchimp) {
+        result = await MailchimpAdapter.validateApiKey(apiKey);
+    } else if (provider === Provider.getresponse) {
+        result = await GetResponseAdapter.validateApiKey(apiKey);
+    } else {
+        throw new CustomError("Unsupported provider", ErrorCode.BAD_REQUEST, 400);
+    }
 
-  if (!result.valid) {
-    throw new CustomError("Invalid API key", ErrorCode.INVALID_TOKEN, 401);
-  }
+    if (!result.valid) {
+        throw new CustomError("Invalid API key", ErrorCode.INVALID_TOKEN, 401);
+    }
 
-  const integration = new Integration({
-    provider,
-    apiKey,
-    meta: result.details,
-    status: Status.active,
-    validatedAt: new Date(),
-  });
+    const integration = new Integration({
+        provider,
+        apiKey,
+        meta: result.details,
+        status: Status.active,
+        validatedAt: new Date(),
+    });
 
-   await integration.save();
+    await integration.save();
     return integration;
 };
 
 export async function fetchLists({
-  integrationId,
-  provider,
-  page = 1,
-  perPage = 10,
+    integrationId,
+    provider,
+    page = 1,
+    perPage = 10,
 }: {
-  integrationId: string;
-  provider: Provider;
-  page?: number;
-  perPage?: number;
+    integrationId: string;
+    provider: Provider;
+    page?: number;
+    perPage?: number;
 }): Promise<NormalizedListResponse> {
-    
-  const integration = await Integration.findOne({ integrationId, provider });
-  if (!integration) {
-    throw new CustomError("info not found", ErrorCode.NOT_FOUND, 404);
-  }
 
-  let lists;
-  if (provider === Provider.mailchimp) {
-    lists = await MailchimpAdapter.fetchLists(integration.apiKey, page, perPage);
-  } else {
-    lists = await GetResponseAdapter.fetchLists(integration.apiKey, page, perPage);
-  }
+    const integration = await Integration.findOne({ _id: integrationId, provider: provider });
+    if (!integration) {
+        throw new CustomError("info not found", ErrorCode.NOT_FOUND, 404);
+    }
 
-  return {
-    lists,
-    meta: { total: lists.length, page, perPage },
-  };
+    let lists;
+    if (provider === Provider.mailchimp) {
+        lists = await MailchimpAdapter.fetchLists(integration.apiKey, page, perPage);
+    } else {
+        lists = await GetResponseAdapter.fetchLists(integration.apiKey, page, perPage);
+    }
+
+    return {
+        lists,
+        meta: { total: lists.length, page, perPage },
+    };
 }
