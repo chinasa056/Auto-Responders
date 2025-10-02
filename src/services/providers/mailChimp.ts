@@ -3,6 +3,7 @@ import httpClient from "../../utils/httpClient";
 import { NormalizedList } from "src/interfaces/normalizedList";
 import { ErrorCode } from "src/enum/error";
 import { Provider } from "src/enum/appEnums";
+import { safeRequest } from "src/utils/safeRequest";
 const BASE_URL = "https://<DC>.api.mailchimp.com/3.0"; 
 
 function getBaseUrl(apiKey: string) {
@@ -41,9 +42,11 @@ export async function validateApiKey(apiKey: string) {
 export async function fetchLists(apiKey: string, page = 1, perPage = 10): Promise<NormalizedList[]> {
   try {
     const url = `${getBaseUrl(apiKey)}/lists?offset=${(page - 1) * perPage}&count=${perPage}`;
-    const res = await httpClient.get(url, {
-      auth: { username: "username", password: apiKey },
-    });
+      const res = await safeRequest(
+      httpClient.get(url, {
+        auth: { username: "username", password: apiKey },
+      })
+    );
 
     return res.data.lists.map((list: any) => ({
       provider: Provider.mailchimp,

@@ -26,5 +26,6 @@ export enum ErrorCode {
   SERVER_ERROR = "SERVER_ERROR",
   INVALID_TOKEN = "invalid_token",
   PROVIDER_UNAVAILABLE = "provider_unavailable",
+  RATE_LIMIT = "rate_limit"
 };
 

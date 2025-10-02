@@ -2,6 +2,7 @@ import { CustomError } from "src/error/CustomError";
 import httpClient from "../../utils/httpClient";
 import { NormalizedList } from "src/interfaces/normalizedList";
 import { ErrorCode } from "src/enum/error";
+import { safeRequest } from "src/utils/safeRequest";
 
 const BASE_URL = "https://api.getresponse.com/v3";
 
@@ -21,10 +22,12 @@ export async function validateApiKey(apiKey: string) {
 
 export async function fetchLists(apiKey: string, page = 1, perPage = 10): Promise<NormalizedList[]> {
   try {
-    const res = await httpClient.get(`${BASE_URL}/campaigns`, {
-      headers: { "X-Auth-Token": `api-key ${apiKey}` },
-      params: { perPage, page },
-    });
+   const res = await safeRequest(
+      httpClient.get(`${BASE_URL}/campaigns`, {
+        headers: { "X-Auth-Token": `api-key ${apiKey}` },
+        params: { perPage, page },
+      })
+    );
 
     return res.data.map((campaign: any) => ({
       provider: "getresponse",
